@@ -11,21 +11,36 @@ namespace HorribleBosses.Boss
     {
         [Header("Identity")]
         public string bossName = "Mr. Manager";
-        public string title = "Regional Manager"; // Displayed under name
+        public string title = "Regional Manager";
 
         [TextArea(2, 4)]
-        public string catchphrase = "You're fired!"; // Said during combat
+        public string catchphrase = "You're fired!";
 
-        [Header("Appearance")]
+        [Header("Gender & Body")]
+        public Gender gender = Gender.Male;
         public BodyType bodyType = BodyType.Average;
+
+        [Range(0.85f, 1.15f)]
+        public float heightScale = 1f; // 0.85 = short, 1.15 = tall
+
+        [Header("Head & Face")]
+        public HairStyle hairStyle = HairStyle.Short;
+        public BeardStyle beardStyle = BeardStyle.None;
+        public FaceShape faceShape = FaceShape.Oval;
+        public EyeShape eyeShape = EyeShape.Normal;
+        public NoseType noseType = NoseType.Average;
+
+        [Header("Outfit")]
         public OutfitType outfit = OutfitType.BusinessSuit;
-        public HeadType headType = HeadType.Default;
+        public AccessoryType accessory = AccessoryType.None;
 
         [Header("Colors")]
         public Color skinTone = new Color(0.9f, 0.75f, 0.65f);
+        public Color eyeColor = new Color(0.4f, 0.3f, 0.2f);
+        public Color hairColor = Color.black;
         public Color primaryClothingColor = Color.gray;
         public Color secondaryClothingColor = Color.white;
-        public Color hairColor = Color.black;
+        public Color accessoryColor = Color.black;
 
         [Header("Stats - Base Values")]
         [Range(100f, 1000f)]
@@ -54,13 +69,13 @@ namespace HorribleBosses.Boss
         public float attackRange = 2f;
 
         [Range(0.3f, 0.7f)]
-        public float rageHealthThreshold = 0.3f; // Enter rage below this HP %
+        public float rageHealthThreshold = 0.3f;
 
         [Header("Special Abilities")]
         public bool canThrowObjects = false;
         public bool canCharge = false;
-        public bool canSummonInterns = false; // Spawns minions
-        public bool hasShield = false; // Temporary damage immunity
+        public bool canSummonInterns = false;
+        public bool hasShield = false;
 
         [Header("Audio")]
         public AudioClip[] tauntSounds;
@@ -69,9 +84,6 @@ namespace HorribleBosses.Boss
         public AudioClip rageSound;
         public AudioClip deathSound;
 
-        /// <summary>
-        /// Get stats modified by difficulty
-        /// </summary>
         public BossStats GetScaledStats()
         {
             float healthMult = 1f;
@@ -88,7 +100,6 @@ namespace HorribleBosses.Boss
                     attackSpeedMult = 0.7f;
                     break;
                 case DifficultyPreset.Medium:
-                    // Default values
                     break;
                 case DifficultyPreset.Hard:
                     healthMult = 1.5f;
@@ -117,18 +128,12 @@ namespace HorribleBosses.Boss
             };
         }
 
-        /// <summary>
-        /// Create a runtime copy of this data for modification
-        /// </summary>
         public BossData CreateRuntimeCopy()
         {
             return Instantiate(this);
         }
     }
 
-    /// <summary>
-    /// Calculated stats after difficulty scaling
-    /// </summary>
     [System.Serializable]
     public struct BossStats
     {
@@ -142,39 +147,109 @@ namespace HorribleBosses.Boss
         public float rageThreshold;
     }
 
+    // ===== ENUMS WITH DESCRIPTIVE NAMES =====
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        NonBinary
+    }
+
     public enum BodyType
     {
-        Skinny,
-        Average,
-        Large,
-        Huge
+        Slim,           // "The Marathoner"
+        Average,        // "Standard Issue"
+        Athletic,       // "Gym Bro"
+        Stocky,         // "The Tank"
+        Large           // "Executive Size"
+    }
+
+    public enum HairStyle
+    {
+        Bald,           // "Chrome Dome"
+        Buzzcut,        // "The Drill Sergeant"
+        Short,          // "Business Standard"
+        Combover,       // "The Denial"
+        Slicked,        // "Wall Street"
+        Pompadour,      // "The Showoff"
+        Messy,          // "Startup Founder"
+        Ponytail,       // "Weekend Warrior"
+        Toupee,         // "The Cover-Up"
+        Mohawk          // "HR Violation"
+    }
+
+    public enum BeardStyle
+    {
+        None,           // "Clean Shaven"
+        Stubble,        // "Casual Friday"
+        Goatee,         // "The Negotiator"
+        FullBeard,      // "The Lumberjack"
+        Mustache,       // "Old School"
+        Mutton,         // "The Senator"
+        SoulPatch       // "The Artist"
+    }
+
+    public enum FaceShape
+    {
+        Oval,           // "Classic"
+        Round,          // "Friendly"
+        Square,         // "The Jawline"
+        Long,           // "Distinguished"
+        Heart           // "Trustworthy"
+    }
+
+    public enum EyeShape
+    {
+        Normal,         // "Standard"
+        Narrow,         // "The Scrutinizer"
+        Wide,           // "The Enthusiast"
+        Tired,          // "Overworked"
+        Angry           // "Always Mad"
+    }
+
+    public enum NoseType
+    {
+        Small,          // "Button"
+        Average,        // "Standard"
+        Large,          // "The Sniffer"
+        Hooked,         // "Roman"
+        Upturned        // "The Snob"
     }
 
     public enum OutfitType
     {
-        BusinessSuit,
-        Casual,
-        HawaiianShirt,
-        GolfAttire,
-        PowerSuit,
-        Suspenders
+        BusinessSuit,       // "Corporate Classic"
+        PowerSuit,          // "The Executive"
+        CasualFriday,       // "Khakis & Polo"
+        HawaiianShirt,      // "The Vacation"
+        GolfAttire,         // "Country Club"
+        Suspenders,         // "Old Fashioned"
+        TechBro,            // "Hoodie & Jeans"
+        LabCoat,            // "The Scientist"
+        SecurityUniform,    // "The Enforcer"
+        JanitorCoveralls    // "The Sleeper"
     }
 
-    public enum HeadType
+    public enum AccessoryType
     {
-        Default,
-        Bald,
-        Combover,
-        Slicked,
-        Messy,
-        Toupee
+        None,
+        Glasses,            // "The Intellectual"
+        Sunglasses,         // "Too Cool"
+        Monocle,            // "Old Money"
+        Earpiece,           // "Always Connected"
+        GoldChain,          // "The Closer"
+        Tie,                // "Professional"
+        Bowtie,             // "Quirky"
+        Lanyard,            // "Badge of Honor"
+        Headset             // "Call Center King"
     }
 
     public enum DifficultyPreset
     {
-        Easy,
-        Medium,
-        Hard,
-        Nightmare
+        Intern,         // Easy
+        Employee,       // Medium
+        Manager,        // Hard
+        Executive       // Nightmare
     }
 }
